@@ -39,7 +39,15 @@ class PaymentsController < ApplicationController
   end
 
   def list
-    render json: "teste"
+    url = "http://localhost:3000/folha/calcular"
+    response = HTTParty.get(url)
+
+    total_liquid = 0
+    response["pagamentos_calculados"].each do |payment|
+      total_liquid += payment["liquido"]
+    end
+
+    render json: {pagamentos_calculados: response, liquido_total: total_liquid}
   end
 
   private
